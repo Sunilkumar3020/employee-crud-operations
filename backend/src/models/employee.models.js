@@ -25,7 +25,7 @@ const employeeSchema = new mongoose.Schema({
     },
     photo: {
         type: String,
-        required: true
+        // required: true
     }
 }, { timestamps: true })
 
