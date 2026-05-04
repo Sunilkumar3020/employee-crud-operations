@@ -5,7 +5,10 @@ export const createEmployee = async (req, res) => {
     try {
         console.log(req.body)
         const { name, email, phone, age, department } = req.body;
-        const photo = req.file?.path;
+        const photo = req.file?.filename;
+        console.log(req.protocol)
+        const protocol = req.protocol || "http";
+        const imageUrl = `${protocol}://${req.get("host")}/uploads/${photo}`
         console.log(req.file)
         if (!name || !email || !phone || !age || !department) {
             return res.status(400).json({ message: "All fields are required!" })
@@ -18,7 +21,7 @@ export const createEmployee = async (req, res) => {
             return res.status(409).json({ message: "Employee already registered" })
         }
 
-        const newEmployee = await Employee.create({ name, email, phone, age, department, photo })
+        const newEmployee = await Employee.create({ name, email, phone, age, department, photo: imageUrl })
         res.status(201).json({ success: true, message: "Employee  created Successfully" })
 
     } catch (error) {
