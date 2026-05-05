@@ -1,5 +1,5 @@
 import { useState } from "react"
-
+import API from "../api/api"
 export default function Profile({ profile }) {
     const [isEditing, setIsEditing] = useState(false)
     const [editingFields, setEditingFields] = useState({
@@ -11,9 +11,17 @@ export default function Profile({ profile }) {
     })
 
     const handleEdit = (e) => {
-        setIsEditing(prevState => !prevState)
+        setIsEditing(true)
     }
-    const handleSave = () => { }
+    const handleSave = async () => {
+        try {
+            const response = await API.put(`/employee/${profile._id}`, editingFields)
+            console.log(response)
+            setIsEditing(false)
+        } catch (error) {
+            console.error(error)
+        }
+    }
     const handleInputChange = (e) => {
         console.log(e)
         setEditingFields(previousValue => (
@@ -22,6 +30,17 @@ export default function Profile({ profile }) {
                 [e.target.name]: e.target.value
             }
         ))
+    }
+
+    const handleCancel = e => {
+        setEditingFields({
+            name: profile.name,
+            age: profile.age,
+            email: profile.email,
+            phone: profile.phone,
+            department: profile.department
+        })
+        setIsEditing(true)
     }
     return (
         <>
@@ -32,14 +51,21 @@ export default function Profile({ profile }) {
                     <img src={profile.photo} alt="" />
 
                 </div>
-                    {isEditing ? (<button onClick={handleSave} className="absolute top-0 right-0 cursor-pointer"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-device-floppy">
+                    {isEditing ? (<div className="flex gap-10"> <button onClick={handleCancel} className="absolute top-0 right-0 cursor-pointer"  ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-x">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M6.707 5.293l5.293 5.292l5.293 -5.292a1 1 0 0 1 1.414 1.414l-5.292 5.293l5.292 5.293a1 1 0 0 1 -1.414 1.414l-5.293 -5.292l-5.293 5.292a1 1 0 1 1 -1.414 -1.414l5.292 -5.293l-5.292 -5.293a1 1 0 0 1 1.414 -1.414" />
+                    </svg></button>  <button onClick={handleSave} className="absolute top-0 right-10 cursor-pointer"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-device-floppy">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                         <path d="M16 3a1 1 0 0 1 .707 .293l4 4a1 1 0 0 1 .293 .707v10a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-12a3 3 0 0 1 3 -3h1v4a1 1 0 0 0 .883 .993l.117 .007h6a1 1 0 0 0 1 -1v-4zm-4 8a2.995 2.995 0 0 0 -2.995 2.898a1 1 0 0 0 -.005 .102a3 3 0 1 0 3 -3m1 -8v3h-4v-3z" />
                     </svg>
-                    </button>) : (<button onClick={handleEdit} className="absolute top-0 right-0 cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
-                    </svg>
-                    </button>)}
+                        </button>  </div>) : (
+
+                        <button onClick={handleEdit} className="absolute top-0 right-0 cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                        </svg>
+                        </button>
+                    )
+                    }
 
 
                 </div>
