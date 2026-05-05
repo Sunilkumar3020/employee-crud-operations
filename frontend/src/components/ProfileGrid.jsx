@@ -25,21 +25,24 @@ export default function ProfileGrid() {
     }, [])
 
     if (loading) <p>Loading ...</p>
-    if (error) <p>{error.message}</p>
+    if (errors) <p>{errors.message}</p>
     return (
-        <>
+        <div className="">
             <h2>Employees Details</h2>
-            {employees.map(employee => (
-
-
-                <div key={employee.id} className="flex ">
-                    <Profile profile={employee} />
-                </div>
+            <div className="flex flex-wrap gap-4">
+                {employees.map(employee => (
 
 
 
-            ))}
-        </>
+                    <Profile key={employee._id} profile={employee} />
+
+
+
+
+                ))}
+
+            </div>
+        </div>
 
     )
 }
