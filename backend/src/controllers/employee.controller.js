@@ -24,7 +24,7 @@ export const createEmployee = async (req, res) => {
             return res.status(409).json({ message: "Employee already registered" })
         }
 
-        const newEmployee = await Employee.create({ name, email, phone, age, department, photo  })
+        const newEmployee = await Employee.create({ name, email, phone, age, department, photo })
         res.status(201).json({ success: true, message: "Employee  created Successfully" })
 
     } catch (error) {
@@ -42,10 +42,39 @@ export const getEmployees = async (req, res) => {
         }
         res.status(200).json({ success: true, data: employees })
     } catch (error) {
-
+        console.error(error)
+        res.status(500).json({ success: false, message: "Server Error, Employee not created" })
     }
 }
 
 // Update Employee
+
+export const updateEmployee = async (req, res) => {
+
+    const { id } = req.params;
+    try {
+        const findEmployee = await Employee.findById(id);
+        if (!findEmployee) {
+            return res.status(404).json({ success: false, message: "Employee not found" })
+        }
+
+        //prepare update data
+        console.log({ ...req.body })
+        console.log(req.body )
+        const updateData = { ...req.body };
+        //if new photo uploaded (cloudinary or multer)
+
+        if (req.file) {
+            updateData.photo = req.file.path; // Cloudinary URL
+
+        }
+
+        const updatedEmployee = await Employee.findByIdAndUpdate(id, updateData, { returnDocument: "after", runValidators: true })
+        res.status(200).json({ success: true, message: "Employee data updated", data: updateEmployee })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ success: false, message: "Server Error, Employee not created" })
+    }
+}
 
 // Delete Employee
