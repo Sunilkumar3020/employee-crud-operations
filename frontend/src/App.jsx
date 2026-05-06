@@ -1,4 +1,5 @@
 import ProfileGrid from "./components/ProfileGrid"
+import EmployeeAdd from "./pages/EmployeeAdd"
 
 
 function App() {
@@ -8,6 +9,7 @@ function App() {
 
     <>
       <ProfileGrid />
+      <EmployeeAdd />
     </>
   )
 }
