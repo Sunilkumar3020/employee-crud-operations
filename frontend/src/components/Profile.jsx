@@ -1,6 +1,6 @@
 import { useState } from "react"
 import API from "../api/api"
-export default function Profile({ profile }) {
+export default function Profile({ profile, setEmployees }) {
     const [isEditing, setIsEditing] = useState(false)
     const [editingFields, setEditingFields] = useState({
         name: profile.name,
@@ -16,7 +16,15 @@ export default function Profile({ profile }) {
     const handleSave = async () => {
         try {
             const response = await API.put(`/employee/${profile._id}`, editingFields)
-            console.log(response)
+            console.log("updated Data", response)
+
+            const updatedDate = response.data.data;
+
+
+            setEmployees(prevData =>
+                prevData.map(emp => emp._id === updatedDate._id ? updatedDate : emp)
+
+            )
             setIsEditing(false)
         } catch (error) {
             console.error(error)
@@ -40,7 +48,7 @@ export default function Profile({ profile }) {
             phone: profile.phone,
             department: profile.department
         })
-        setIsEditing(true)
+        setIsEditing(false)
     }
     return (
         <>
@@ -51,10 +59,10 @@ export default function Profile({ profile }) {
                     <img src={profile.photo} alt="" />
 
                 </div>
-                    {isEditing ? (<div className="flex gap-10"> <button onClick={handleCancel} className="absolute top-0 right-0 cursor-pointer"  ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-x">
+                    {isEditing ? (<div className="flex gap-10"> <button onClick={handleCancel} className="absolute top-0 right-0 cursor-pointer"  ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="icon icon-tabler icons-tabler-filled icon-tabler-x">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                         <path d="M6.707 5.293l5.293 5.292l5.293 -5.292a1 1 0 0 1 1.414 1.414l-5.292 5.293l5.292 5.293a1 1 0 0 1 -1.414 1.414l-5.293 -5.292l-5.293 5.292a1 1 0 1 1 -1.414 -1.414l5.292 -5.293l-5.292 -5.293a1 1 0 0 1 1.414 -1.414" />
-                    </svg></button>  <button onClick={handleSave} className="absolute top-0 right-10 cursor-pointer"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-device-floppy">
+                    </svg></button>  <button onClick={handleSave} className="absolute top-0 right-10 cursor-pointer"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="icon icon-tabler icons-tabler-filled icon-tabler-device-floppy">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                         <path d="M16 3a1 1 0 0 1 .707 .293l4 4a1 1 0 0 1 .293 .707v10a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-12a3 3 0 0 1 3 -3h1v4a1 1 0 0 0 .883 .993l.117 .007h6a1 1 0 0 0 1 -1v-4zm-4 8a2.995 2.995 0 0 0 -2.995 2.898a1 1 0 0 0 -.005 .102a3 3 0 1 0 3 -3m1 -8v3h-4v-3z" />
                     </svg>

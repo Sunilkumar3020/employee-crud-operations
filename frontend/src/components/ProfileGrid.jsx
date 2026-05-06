@@ -13,7 +13,7 @@ export default function ProfileGrid() {
                 setLoading(true)
                 const response = await API.get('/employee')
                 setLoading(false)
-                console.log(response.data.data)
+                // console.log(response.data.data)
                 setEmployees(response.data.data)
             } catch (error) {
                 console.error(error)
@@ -34,7 +34,7 @@ export default function ProfileGrid() {
 
 
 
-                    <Profile key={employee._id} profile={employee} />
+                    <Profile key={employee._id} profile={employee} setEmployees={setEmployees} />
 
 
 

@@ -70,7 +70,7 @@ export const updateEmployee = async (req, res) => {
         }
 
         const updatedEmployee = await Employee.findByIdAndUpdate(id, updateData, { returnDocument: "after", runValidators: true })
-        res.status(200).json({ success: true, message: "Employee data updated", data: updateEmployee })
+        res.status(200).json({ success: true, message: "Employee data updated", data: updatedEmployee })
     } catch (error) {
         console.error(error)
         res.status(500).json({ success: false, message: "Server Error, Employee not created" })
